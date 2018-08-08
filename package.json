@@ -1,0 +1,25 @@
+{
+  "name": "node-secrets",
+  "version": "0.0.1",
+  "main": "index.js",
+  "author": "MasatoMakino",
+  "license": "MIT",
+  "dependencies": {
+    "istextorbinary": "^2.2.1",
+    "staged-git-files": "^1.1.1"
+  },
+  "devDependencies": {
+    "husky": "^1.0.0-rc.13",
+    "prettier": "^1.14.0",
+    "pretty-quick": "^1.6.0"
+  },
+  "scripts": {
+    "secrets": "node task/node-secrets",
+    "prettyQuick": "pretty-quick --staged"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run prettyQuick && npm run secrets"
+    }
+  }
+}
