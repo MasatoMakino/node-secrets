@@ -49,7 +49,13 @@ const checkFile = path => {
     if (result) return;
 
     fs.readFile(projectDir + path, (err, data) => {
-      if (err) throw err;
+      if (err) {
+        //ファイルが存在しない場合はチェックを中止。
+        if (err.code === "ENOENT") {
+          return;
+        }
+        throw err;
+      }
 
       for (pattern of patterns) {
         checkPattern(path, data, pattern);
