@@ -1,7 +1,7 @@
 {
   "name": "node-secrets",
   "version": "0.0.1",
-  "main": "index.js",
+  "main": "node-secrets.js",
   "author": "MasatoMakino",
   "license": "MIT",
   "dependencies": {
@@ -14,7 +14,7 @@
     "pretty-quick": "^1.6.0"
   },
   "scripts": {
-    "secrets": "node task/node-secrets",
+    "secrets": "node node-secrets",
     "prettyQuick": "pretty-quick --staged"
   },
   "husky": {

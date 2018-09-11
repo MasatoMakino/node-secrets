@@ -4,9 +4,13 @@ const istextorbinary = require("istextorbinary");
 const projectDir = `${process.cwd()}/`;
 
 const patterns = [
-  "[A-Z0-9]{20}",
-  "${opt_quote}${aws}(SECRET|secret|Secret)?_?(ACCESS|access|Access)?_?(KEY|key|Key)${opt_quote}${connect}${opt_quote}[A-Za-z0-9/+=]{40}${opt_quote}",
-  "${opt_quote}${aws}(ACCOUNT|account|Account)_?(ID|id|Id)?${opt_quote}${connect}${opt_quote}[0-9]{4}-?[0-9]{4}-?[0-9]{4}${opt_quote}"
+  RegExp("[A-Z0-9]{20}"),
+  RegExp(
+    "${opt_quote}${aws}(SECRET|secret|Secret)?_?(ACCESS|access|Access)?_?(KEY|key|Key)${opt_quote}${connect}${opt_quote}[A-Za-z0-9/+=]{40}${opt_quote}"
+  ),
+  RegExp(
+    "${opt_quote}${aws}(ACCOUNT|account|Account)_?(ID|id|Id)?${opt_quote}${connect}${opt_quote}[0-9]{4}-?[0-9]{4}-?[0-9]{4}${opt_quote}"
+  )
 ];
 
 /**
@@ -41,7 +45,7 @@ const checkResults = results => {
  * @param path{string}
  */
 const checkFile = path => {
-  istextorbinary.isBinary(projectDir + path, null, function(err, result) {
+  istextorbinary.isBinary(projectDir + path, null, (err, result) => {
     if (err) {
       throw err;
       process.exit(1); // ensure git hooks abort
@@ -57,8 +61,8 @@ const checkFile = path => {
         throw err;
       }
 
-      for (pattern of patterns) {
-        checkPattern(path, data, pattern);
+      for (regexp of patterns) {
+        checkPattern(path, data, regexp);
       }
     });
   });
@@ -68,10 +72,9 @@ const checkFile = path => {
  * string内を検査する
  * @param path{string}
  * @param data{string}
- * @param pattern{string}
+ * @param regexp{RegExp}
  */
-const checkPattern = (path, data, pattern) => {
-  let regexp = RegExp(pattern);
+const checkPattern = (path, data, regexp) => {
   const result = regexp.exec(data);
 
   if (result != null) {
