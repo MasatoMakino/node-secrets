@@ -3,16 +3,20 @@
 
 const sgf = require("staged-git-files");
 const fs = require("fs");
+const path = require("path");
 const istextorbinary = require("istextorbinary");
 const projectDir = `${process.cwd()}/`;
 
+const aws = "(AWS|aws|Aws)?_?";
+const quote = "(\"|')";
+const connect = "s*(:|=>|=)s*";
+const opt_quote = `${quote}?`;
+
 const patterns = [
   RegExp("[A-Z0-9]{20}"),
+  RegExp("[A-Za-z0-9/+=]{40}"),
   RegExp(
-    "${opt_quote}${aws}(SECRET|secret|Secret)?_?(ACCESS|access|Access)?_?(KEY|key|Key)${opt_quote}${connect}${opt_quote}[A-Za-z0-9/+=]{40}${opt_quote}"
-  ),
-  RegExp(
-    "${opt_quote}${aws}(ACCOUNT|account|Account)_?(ID|id|Id)?${opt_quote}${connect}${opt_quote}[0-9]{4}-?[0-9]{4}-?[0-9]{4}${opt_quote}"
+    `${opt_quote}${aws}(ACCOUNT|account|Account)_?(ID|id|Id)?${opt_quote}${connect}${opt_quote}[0-9]{4}-?[0-9]{4}-?[0-9]{4}${opt_quote}`
   )
 ];
 
@@ -42,6 +46,12 @@ const checkResults = results => {
     if (projectDir + result.filename === __filename) {
       continue;
     }
+    //.lockファイルは検査対象外。
+    let ext = path.basename(result.filename);
+    if (ext === "yarn.lock") {
+      continue;
+    }
+
     checkFile(result.filename);
   }
 };
@@ -85,7 +95,8 @@ const checkPattern = (path, data, regexp) => {
 
   if (result != null) {
     console.warn("AWS key is found!");
-    console.warn(projectDir + path);
+    console.warn(path);
+    console.warn(result);
     process.exit(1); // ensure git hooks abort
   }
 };
