@@ -1,3 +1,6 @@
+#!/usr/bin/env node
+"use strict";
+
 const sgf = require("staged-git-files");
 const fs = require("fs");
 const istextorbinary = require("istextorbinary");
@@ -13,16 +16,19 @@ const patterns = [
   )
 ];
 
-/**
- * staging状態のファイル一覧を取得する。
- */
-sgf((err, results) => {
-  if (err) {
-    console.log(err);
-    process.exit(1); // ensure git hooks abort
-  }
-  checkResults(results);
-});
+const scan = () => {
+  /**
+   * staging状態のファイル一覧を取得する。
+   */
+  sgf((err, results) => {
+    if (err) {
+      console.log(err);
+      process.exit(1); // ensure git hooks abort
+    }
+    checkResults(results);
+  });
+};
+scan();
 
 /**
  * ファイル一覧を受け取って検査を開始する。
@@ -31,7 +37,7 @@ sgf((err, results) => {
 const checkResults = results => {
   console.log(`node-secrets : checking ${results.length} items...`);
 
-  for (result of results) {
+  for (let result of results) {
     //自分自身は検査の対象にならない。
     if (projectDir + result.filename === __filename) {
       continue;
@@ -45,23 +51,23 @@ const checkResults = results => {
  * @param path{string}
  */
 const checkFile = path => {
-  istextorbinary.isBinary(projectDir + path, null, (err, result) => {
+  fs.readFile(projectDir + path, (err, data) => {
     if (err) {
-      throw err;
-      process.exit(1); // ensure git hooks abort
-    }
-    if (result) return;
-
-    fs.readFile(projectDir + path, (err, data) => {
-      if (err) {
-        //ファイルが存在しない場合はチェックを中止。
-        if (err.code === "ENOENT") {
-          return;
-        }
-        throw err;
+      //ファイルが存在しない場合はチェックを中止。
+      if (err.code === "ENOENT") {
+        return;
       }
+      throw err;
+    }
 
-      for (regexp of patterns) {
+    istextorbinary.isBinary("", data, (err, result) => {
+      if (err) {
+        throw err;
+        process.exit(1); // ensure git hooks abort
+      }
+      if (result) return;
+
+      for (let regexp of patterns) {
         checkPattern(path, data, regexp);
       }
     });
