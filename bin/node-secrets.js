@@ -47,8 +47,8 @@ const checkResults = results => {
       continue;
     }
     //.lockファイルは検査対象外。
-    let ext = path.basename(result.filename);
-    if (ext === "yarn.lock") {
+    let name = path.basename(result.filename);
+    if (name === "yarn.lock" || name === "package-lock.json") {
       continue;
     }
 
