@@ -2,7 +2,7 @@
   "name": "node-secrets",
   "version": "0.0.2",
   "bin": {
-    "node-secrets": "node-secrets.js"
+    "node-secrets": "bin/node-secrets.js"
   },
   "description": "AWS Secret Key Checker",
   "author": "MasatoMakino",
