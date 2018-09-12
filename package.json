@@ -1,7 +1,10 @@
 {
   "name": "node-secrets",
   "version": "0.0.1",
-  "main": "node-secrets.js",
+  "bin": {
+    "node-secrets": "node-secrets.js"
+  },
+  "description": "AWS Secret Key Checker",
   "author": "MasatoMakino",
   "license": "MIT",
   "dependencies": {
