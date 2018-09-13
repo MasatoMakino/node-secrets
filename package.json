@@ -13,16 +13,18 @@
   },
   "devDependencies": {
     "husky": "^1.0.0-rc.13",
+    "jasmine": "^3.2.0",
     "prettier": "^1.14.0",
     "pretty-quick": "^1.6.0"
   },
   "scripts": {
+    "test": "jasmine",
     "secrets": "node bin/node-secrets",
     "prettyQuick": "pretty-quick --staged"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run prettyQuick && npm run secrets"
+      "pre-commit": "npm run prettyQuick"
     }
   }
 }

@@ -20,7 +20,7 @@ const patterns = [
   )
 ];
 
-const scan = () => {
+exports.scan = () => {
   /**
    * staging状態のファイル一覧を取得する。
    */
@@ -32,7 +32,7 @@ const scan = () => {
     checkResults(results);
   });
 };
-scan();
+exports.scan();
 
 /**
  * ファイル一覧を受け取って検査を開始する。
@@ -52,7 +52,7 @@ const checkResults = results => {
       continue;
     }
 
-    checkFile(result.filename);
+    exports.checkFile(result.filename);
   }
 };
 
@@ -60,7 +60,7 @@ const checkResults = results => {
  * 指定されたURLのファイルを検査する
  * @param path{string}
  */
-const checkFile = path => {
+exports.checkFile = path => {
   fs.readFile(projectDir + path, (err, data) => {
     if (err) {
       //ファイルが存在しない場合はチェックを中止。
@@ -75,13 +75,29 @@ const checkFile = path => {
         throw err;
         process.exit(1); // ensure git hooks abort
       }
-      if (result) return;
+      if (result) {
+        return;
+      }
 
-      for (let regexp of patterns) {
-        checkPattern(path, data, regexp);
+      const execArray = exports.checkPatterns(path, data);
+      if (execArray != null) {
+        process.exit(1); // ensure git hooks abort
       }
     });
   });
+};
+
+exports.checkPatterns = (path, data) => {
+  for (let regexp of patterns) {
+    const result = checkPattern(path, data, regexp);
+    if (result != null) {
+      console.warn("AWS key is found!");
+      console.warn(path);
+      console.warn(result);
+      return result;
+    }
+  }
+  return null;
 };
 
 /**
@@ -92,11 +108,5 @@ const checkFile = path => {
  */
 const checkPattern = (path, data, regexp) => {
   const result = regexp.exec(data);
-
-  if (result != null) {
-    console.warn("AWS key is found!");
-    console.warn(path);
-    console.warn(result);
-    process.exit(1); // ensure git hooks abort
-  }
+  return result;
 };
