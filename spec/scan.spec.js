@@ -68,7 +68,7 @@ describe("jpg", () => {
   });
 });
 
-describe("jpg", () => {
+describe("png", () => {
   const path = "spec/m0444.png";
   let data;
   let error;
