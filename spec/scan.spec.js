@@ -12,20 +12,12 @@ describe("文字列の検査", () => {
 
   it("アクセスキーはエラーを返す", () => {
     const key = "AKIAIOSFODNN7EXAMPLE";
-    const result = [];
-    result[0] = key;
-    result["index"] = 0;
-    result["input"] = key;
-    expect(secrets.checkPatterns("", key)).toEqual(result);
+    expect(secrets.checkPatterns("", key)).toContain(key, 0);
   });
 
   it("シークレットアクセスキーはエラーを返す", () => {
     const key = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY";
-    const result = [];
-    result[0] = key;
-    result["index"] = 0;
-    result["input"] = key;
-    expect(secrets.checkPatterns("", key)).toEqual(result);
+    expect(secrets.checkPatterns("", key)).toContain(key, 0);
   });
 });
 
