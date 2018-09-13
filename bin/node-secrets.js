@@ -42,17 +42,13 @@ const checkResults = results => {
   console.log(`node-secrets : checking ${results.length} items...`);
 
   for (let result of results) {
-    //自分自身は検査の対象にならない。
-    if (projectDir + result.filename === __filename) {
-      continue;
-    }
     //.lockファイルは検査対象外。
     let name = path.basename(result.filename);
     if (name === "yarn.lock" || name === "package-lock.json") {
       continue;
     }
 
-    exports.checkFile(result.filename);
+    checkFile(result.filename);
   }
 };
 
@@ -60,31 +56,37 @@ const checkResults = results => {
  * 指定されたURLのファイルを検査する
  * @param path{string}
  */
-exports.checkFile = path => {
+const checkFile = path => {
   fs.readFile(projectDir + path, (err, data) => {
-    if (err) {
-      //ファイルが存在しない場合はチェックを中止。
-      if (err.code === "ENOENT") {
-        return;
-      }
-      throw err;
-    }
-
-    istextorbinary.isBinary("", data, (err, result) => {
-      if (err) {
-        throw err;
-        process.exit(1); // ensure git hooks abort
-      }
-      if (result) {
-        return;
-      }
-
-      const execArray = exports.checkPatterns(path, data);
-      if (execArray != null) {
-        process.exit(1); // ensure git hooks abort
-      }
-    });
+    exports.checkBuffer(path, err, data);
   });
+};
+
+/**
+ * 読み込まれたバッファーを検査する
+ * @param path
+ * @param err
+ * @param data
+ * @returns {*}
+ */
+exports.checkBuffer = (path, err, data) => {
+  if (err) {
+    //ファイルが存在しない場合はチェックを中止。
+    if (err.code === "ENOENT") {
+      return err.code;
+    }
+    throw err;
+  }
+
+  const isBinary = istextorbinary.isBinarySync("", data);
+  if (isBinary === true) {
+    return "BINARY";
+  }
+
+  const execArray = exports.checkPatterns(path, data);
+  if (execArray != null) {
+    process.exit(1); // ensure git hooks abort
+  }
 };
 
 exports.checkPatterns = (path, data) => {
