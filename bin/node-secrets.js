@@ -5,6 +5,7 @@ const sgf = require("staged-git-files");
 const fs = require("fs");
 const path = require("path");
 const istextorbinary = require("istextorbinary");
+const isSvg = require("is-svg");
 const projectDir = `${process.cwd()}/`;
 
 const aws = "(AWS|aws|Aws)?_?";
@@ -79,7 +80,8 @@ exports.checkBuffer = (path, err, data) => {
   }
 
   const isBinary = istextorbinary.isBinarySync("", data);
-  if (isBinary === true) {
+  const isSVG = isSvg(data);
+  if (isBinary === true || isSVG === true) {
     return "BINARY";
   }
 

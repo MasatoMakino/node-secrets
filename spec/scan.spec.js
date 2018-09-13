@@ -86,3 +86,22 @@ describe("png", () => {
     done();
   });
 });
+
+describe("svg", () => {
+  const path = "spec/icon.svg";
+  let data;
+  let error;
+
+  beforeEach(done => {
+    fs.readFile(path, (err, buffer) => {
+      error = err;
+      data = buffer;
+      done();
+    });
+  });
+
+  it("svg画像は無視", done => {
+    expect(secrets.checkBuffer(path, error, data)).toBe("BINARY");
+    done();
+  });
+});
