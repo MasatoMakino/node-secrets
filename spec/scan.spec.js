@@ -105,3 +105,13 @@ describe("svg", () => {
     done();
   });
 });
+
+describe(".lockファイルの除外", () => {
+  it("yarn.lockは無視", () => {
+    expect(secrets.checkFile("./any/yarn.lock")).toBe(false);
+  });
+
+  it("package-lock.jsonは無視", () => {
+    expect(secrets.checkFile("./any/package-lock.json")).toBe(false);
+  });
+});

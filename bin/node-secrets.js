@@ -43,21 +43,27 @@ const checkResults = results => {
   console.log(`node-secrets : checking ${results.length} items...`);
 
   for (let result of results) {
-    //.lockファイルは検査対象外。
-    let name = path.basename(result.filename);
-    if (name === "yarn.lock" || name === "package-lock.json") {
-      continue;
-    }
-
-    checkFile(result.filename);
+    exports.checkFile(result.filename);
   }
+};
+
+const isTargetFile = filePath => {
+  //.lockファイルは検査対象外。
+  let name = path.basename(filePath);
+  if (name === "yarn.lock" || name === "package-lock.json") {
+    return false;
+  }
+  return true;
 };
 
 /**
  * 指定されたURLのファイルを検査する
  * @param path{string}
  */
-const checkFile = path => {
+exports.checkFile = path => {
+  if (!isTargetFile(path)) {
+    return false;
+  }
   fs.readFile(projectDir + path, (err, data) => {
     exports.checkBuffer(path, err, data);
   });
