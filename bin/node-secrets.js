@@ -101,6 +101,7 @@ const checkBuffer = (path, err, data) => {
   if (execArray != null) {
     process.exit(1); // ensure git hooks abort
   }
+  return "CHECKED";
 };
 
 exports.checkPatterns = (path, data) => {

@@ -37,6 +37,22 @@ describe("存在しないファイル", () => {
   });
 });
 
+describe("json", () => {
+  const path = "./package.json";
+  let resultString;
+  beforeEach(done => {
+    secrets.checkFile(path).then(result => {
+      resultString = result;
+      done();
+    });
+  });
+
+  it("テキストファイルは検査の上でCHECKEDを返す。", done => {
+    expect(resultString).toBe("CHECKED");
+    done();
+  });
+});
+
 describe("jpg", () => {
   const path = "./spec/m0938.jpg";
   let resultString;
