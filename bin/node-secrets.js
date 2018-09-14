@@ -48,7 +48,6 @@ exports.checkResults = results => {
     }
     Promise.all(promises).then(results => {
       resolve(results);
-      return;
     });
   });
 };
@@ -129,6 +128,5 @@ exports.checkPatterns = (path, data) => {
  * @param regexp{RegExp}
  */
 const checkPattern = (path, data, regexp) => {
-  const result = regexp.exec(data);
-  return result;
+  return regexp.exec(data);
 };
