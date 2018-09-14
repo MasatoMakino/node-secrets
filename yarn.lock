@@ -1024,7 +1024,7 @@ glob-parent@^2.0.0:
   dependencies:
     is-glob "^2.0.0"
 
-glob@^7.0.3, glob@^7.0.5, glob@^7.0.6, glob@^7.1.1, glob@^7.1.2:
+glob@^7.0.3, glob@^7.0.5, glob@^7.1.1, glob@^7.1.2:
   version "7.1.3"
   resolved "https://registry.yarnpkg.com/glob/-/glob-7.1.3.tgz#3960832d3f1574108342dafd3a67b332c0969df1"
   dependencies:
@@ -1497,17 +1497,6 @@ istextorbinary@^2.2.1:
     binaryextensions "2"
     editions "^1.3.3"
     textextensions "2"
-
-jasmine-core@~3.2.0:
-  version "3.2.1"
-  resolved "https://registry.yarnpkg.com/jasmine-core/-/jasmine-core-3.2.1.tgz#8e4ff5b861603ee83343f2b49eee6a0ffe9650ce"
-
-jasmine@^3.2.0:
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/jasmine/-/jasmine-3.2.0.tgz#b3a018454781805650e46578803d08e7cfdd7b3d"
-  dependencies:
-    glob "^7.0.6"
-    jasmine-core "~3.2.0"
 
 jest-changed-files@^23.4.2:
   version "23.4.2"

@@ -30,7 +30,7 @@ exports.scan = () => {
       console.log(err);
       process.exit(1); // ensure git hooks abort
     }
-    checkResults(results);
+    exports.checkResults(results);
   });
 };
 exports.scan();
@@ -39,12 +39,18 @@ exports.scan();
  * ファイル一覧を受け取って検査を開始する。
  * @param results{Array}
  */
-const checkResults = results => {
+exports.checkResults = results => {
   console.log(`node-secrets : checking ${results.length} items...`);
-
-  for (let result of results) {
-    exports.checkFile(result.filename);
-  }
+  return new Promise((resolve, reject) => {
+    let promises = [];
+    for (let result of results) {
+      promises.push(exports.checkFile(result.filename));
+    }
+    Promise.all(promises).then(results => {
+      resolve(results);
+      return;
+    });
+  });
 };
 
 const isTargetFile = filePath => {
@@ -66,10 +72,11 @@ exports.checkFile = path => {
   return new Promise((resolve, reject) => {
     if (!isTargetFile(path)) {
       resolve("NOT TARGET");
+      return;
     }
 
     fs.readFile(projectDir + path, (err, data) => {
-      const result = checkBuffer(path, err, data);
+      const result = exports.checkBuffer(path, err, data);
       resolve(result);
     });
   });
@@ -82,7 +89,7 @@ exports.checkFile = path => {
  * @param data
  * @returns {*}
  */
-const checkBuffer = (path, err, data) => {
+exports.checkBuffer = (path, err, data) => {
   if (err) {
     //ファイルが存在しない場合はチェックを中止。
     if (err.code === "ENOENT") {
@@ -108,9 +115,7 @@ exports.checkPatterns = (path, data) => {
   for (let regexp of patterns) {
     const result = checkPattern(path, data, regexp);
     if (result != null) {
-      console.warn("AWS key is found!");
-      console.warn(path);
-      console.warn(result);
+      console.warn("AWS key is found!", path, result);
       return result;
     }
   }
