@@ -22,9 +22,7 @@ const patterns = [
 ];
 
 exports.scan = () => {
-  /**
-   * staging状態のファイル一覧を取得する。
-   */
+  //staging状態のファイル一覧を取得する。
   sgf((err, results) => {
     if (err) {
       console.log(err);
@@ -110,23 +108,19 @@ exports.checkBuffer = (path, err, data) => {
   return "CHECKED";
 };
 
+/**
+ * バイナリデータを検査する
+ * @param path 対象ファイルパス
+ * @param data バッファー
+ * @returns {*} パターンが存在した場合は配列、それ以外はnullが帰る
+ */
 exports.checkPatterns = (path, data) => {
   for (let regexp of patterns) {
-    const result = checkPattern(path, data, regexp);
+    const result = regexp.exec(data);
     if (result != null) {
       console.warn("AWS key is found!", path, result);
       return result;
     }
   }
   return null;
-};
-
-/**
- * string内を検査する
- * @param path{string}
- * @param data{string}
- * @param regexp{RegExp}
- */
-const checkPattern = (path, data, regexp) => {
-  return regexp.exec(data);
 };

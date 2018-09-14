@@ -1,5 +1,9 @@
-const secrets = require("../bin/node-secrets.js");
 const fs = require("fs");
+
+const spyLog = jest.spyOn(console, "log").mockImplementation(x => x);
+const spyWarn = jest.spyOn(console, "warn").mockImplementation(x => x);
+
+const secrets = require("../bin/node-secrets.js");
 
 describe("文字列の検査", () => {
   test("空文字の場合はnull", () => {
