@@ -61,11 +61,17 @@ const isTargetFile = filePath => {
  * @param path{string}
  */
 exports.checkFile = path => {
-  if (!isTargetFile(path)) {
-    return false;
-  }
-  fs.readFile(projectDir + path, (err, data) => {
-    exports.checkBuffer(path, err, data);
+  console.log(`node-secrets : ${path}`);
+
+  return new Promise((resolve, reject) => {
+    if (!isTargetFile(path)) {
+      resolve("NOT TARGET");
+    }
+
+    fs.readFile(projectDir + path, (err, data) => {
+      const result = checkBuffer(path, err, data);
+      resolve(result);
+    });
   });
 };
 
@@ -76,7 +82,7 @@ exports.checkFile = path => {
  * @param data
  * @returns {*}
  */
-exports.checkBuffer = (path, err, data) => {
+const checkBuffer = (path, err, data) => {
   if (err) {
     //ファイルが存在しない場合はチェックを中止。
     if (err.code === "ENOENT") {
