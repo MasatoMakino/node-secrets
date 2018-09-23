@@ -13,10 +13,10 @@
     "staged-git-files": "^1.1.1"
   },
   "devDependencies": {
-    "husky": "^1.0.0-rc.13",
+    "husky": "^1.0.0-rc.15",
     "jest": "^23.6.0",
-    "prettier": "^1.14.0",
-    "pretty-quick": "^1.6.0"
+    "prettier": "^1.14.3",
+    "pretty-quick": "^1.7.0"
   },
   "scripts": {
     "test": "jest --coverage",
