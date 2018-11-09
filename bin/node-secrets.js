@@ -10,12 +10,15 @@ const projectDir = `${process.cwd()}/`;
 
 const aws = "(AWS|aws|Aws)?_?";
 const quote = "(\"|')";
-const connect = "s*(:|=>|=)s*";
+const connect = "\\s*(:|=>|=)\\s*";
 const opt_quote = `${quote}?`;
 
+const KEY_PATTERN = `(A3T[A-Z0-9]|AKIA|AGPA|AIDA|AROA|AIPA|ANPA|ANVA|ASIA)[A-Z0-9]{16}`;
+const SECRET_PATTERN = `${opt_quote}${aws}(SECRET|secret|Secret)?_?(ACCESS|access|Access)?_?(KEY|key|Key)${opt_quote}${connect}${opt_quote}[A-Za-z0-9/+=]{40}${opt_quote}`;
+
 const patterns = [
-  RegExp("[A-Z0-9]{20}"),
-  RegExp("[A-Za-z0-9/+=]{40}"),
+  RegExp(KEY_PATTERN),
+  RegExp(SECRET_PATTERN),
   RegExp(
     `${opt_quote}${aws}(ACCOUNT|account|Account)_?(ID|id|Id)?${opt_quote}${connect}${opt_quote}[0-9]{4}-?[0-9]{4}-?[0-9]{4}${opt_quote}`
   )

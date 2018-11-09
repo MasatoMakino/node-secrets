@@ -5,6 +5,10 @@ const spyWarn = jest.spyOn(console, "warn").mockImplementation(x => x);
 
 const secrets = require("../bin/node-secrets.js");
 
+const dummyKey = "AKIAIOSFODNN7EXAMPLE";
+const dummySecretKey = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY";
+const dummySecretKeySet = "key = " + dummySecretKey;
+
 describe("文字列の検査", () => {
   test("空文字の場合はnull", () => {
     expect(secrets.checkPatterns("", "")).toBeNull();
@@ -15,13 +19,36 @@ describe("文字列の検査", () => {
   });
 
   test("アクセスキーはエラーを返す", () => {
-    const key = "AKIAIOSFODNN7EXAMPLE";
+    expect(secrets.checkPatterns("", dummyKey)).toContain(dummyKey, 0);
+  });
+
+  test("シークレットアクセスキー単体では検査にかからない", () => {
+    expect(secrets.checkPatterns("", dummySecretKey)).toBeNull();
+  });
+
+  test("シークレットアクセスキーを変数keyに代入しようとするとエラーを返す", () => {
+    expect(secrets.checkPatterns("", dummySecretKeySet)).toContain(
+      dummySecretKeySet,
+      0
+    );
+
+    let key = "key=" + dummySecretKey;
+    expect(secrets.checkPatterns("", key)).toContain(key, 0);
+    key = "key:" + dummySecretKey;
+    expect(secrets.checkPatterns("", key)).toContain(key, 0);
+    key = "key=>" + dummySecretKey;
+    expect(secrets.checkPatterns("", key)).toContain(key, 0);
+    key = "KEY : " + dummySecretKey;
     expect(secrets.checkPatterns("", key)).toContain(key, 0);
   });
 
-  test("シークレットアクセスキーはエラーを返す", () => {
-    const key = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY";
-    expect(secrets.checkPatterns("", key)).toContain(key, 0);
+  test("ファイルパスは検査にかからない", () => {
+    expect(
+      secrets.checkPatterns(
+        "",
+        "/anything/path/to/file/too/long/long/over40.js"
+      )
+    ).toBeNull();
   });
 });
 
@@ -59,7 +86,7 @@ describe("バッファの処理", () => {
     const exit = jest
       .spyOn(process, "exit")
       .mockImplementation(number => number);
-    secrets.checkBuffer("", null, "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY");
+    secrets.checkBuffer("", null, dummySecretKeySet);
     expect(exit).toHaveBeenCalledWith(1);
   });
 });
