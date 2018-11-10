@@ -49,6 +49,7 @@ exports.checkResults = results => {
     }
     Promise.all(promises).then(results => {
       resolve(results);
+      console.log(`node-secrets : Done.`);
     });
   });
 };
@@ -120,10 +121,60 @@ exports.checkBuffer = (path, err, data) => {
 exports.checkPatterns = (path, data) => {
   for (let regexp of patterns) {
     const result = regexp.exec(data);
+
     if (result != null) {
-      console.warn("AWS key is found!", path, result);
+      console.warn("AWS key is found!");
+      console.warn("  File Path :", path);
+      console.warn(
+        "  Line number :",
+        getLineNumber(result.input, result.index)
+      );
+      console.warn(
+        "  Matched :",
+        getWarningLine(result.input, result.index, result[0])
+      );
+
       return result;
     }
   }
   return null;
+};
+
+/**
+ * 指定されたキャラクターインデックスの行数を取得する。
+ * @private
+ * @param str 検査を行う文字列
+ * @param index 行数を確認するキャラクターインデックス
+ * @returns {number} 行数
+ */
+const getLineNumber = (str, index) => {
+  const tempString = str.substring(0, index);
+  return tempString.split("\n").length;
+};
+
+/**
+ * 指定されたキャラクターインデックスの行の内容を取得する。
+ * @private
+ * @param str
+ * @param index
+ * @returns {*|string}
+ */
+const getLineString = (str, index) => {
+  const lineNum = getLineNumber(str, index);
+  return str.split("\n")[lineNum - 1];
+};
+
+/**
+ * 指定されたキャラクターインデックスとマッチ文字列から、
+ * コンソール出力用のカラーリングされた文字列を生成する。
+ *
+ * @private
+ * @param str
+ * @param index
+ * @param matched
+ * @returns {string}
+ */
+const getWarningLine = (str, index, matched) => {
+  const line = getLineString(str, index);
+  return line.replace(matched, `\u001b[31m${matched}\u001b[0m`);
 };

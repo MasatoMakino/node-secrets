@@ -1,9 +1,8 @@
 const fs = require("fs");
+const secrets = require("../bin/node-secrets.js");
 
 const spyLog = jest.spyOn(console, "log").mockImplementation(x => x);
 const spyWarn = jest.spyOn(console, "warn").mockImplementation(x => x);
-
-const secrets = require("../bin/node-secrets.js");
 
 const dummyKey = "AKIAIOSFODNN7EXAMPLE";
 const dummySecretKey = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY";
