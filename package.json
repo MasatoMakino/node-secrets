@@ -1,6 +1,6 @@
 {
   "name": "node-secrets",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "bin": {
     "node-secrets": "bin/node-secrets.js"
   },
@@ -9,19 +9,20 @@
   "license": "MIT",
   "dependencies": {
     "is-svg": "^3.0.0",
-    "istextorbinary": "^2.3.0",
+    "istextorbinary": "^2.5.1",
     "staged-git-files": "^1.1.2"
   },
   "devDependencies": {
-    "husky": "^1.1.3",
-    "jest": "^23.6.0",
-    "prettier": "^1.15.1",
-    "pretty-quick": "^1.8.0"
+    "husky": "^1.3.1",
+    "jest": "^24.1.0",
+    "prettier": "^1.16.4",
+    "pretty-quick": "^1.10.0"
   },
   "scripts": {
     "test": "jest --coverage",
     "secrets": "node bin/node-secrets",
-    "prettyQuick": "pretty-quick --staged"
+    "prettyQuick": "pretty-quick --staged",
+    "doc:card": "repoimg -n MasatoMakino/node-secrets -o ./docs/card.png"
   },
   "husky": {
     "hooks": {
