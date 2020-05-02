@@ -1,8 +1,8 @@
 const fs = require("fs");
 const secrets = require("../bin/node-secrets.js");
 
-const spyLog = jest.spyOn(console, "log").mockImplementation(x => x);
-const spyWarn = jest.spyOn(console, "warn").mockImplementation(x => x);
+const spyLog = jest.spyOn(console, "log").mockImplementation((x) => x);
+const spyWarn = jest.spyOn(console, "warn").mockImplementation((x) => x);
 
 const dummyKey = "AKIAIOSFODNN7EXAMPLE";
 const dummySecretKey = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY";
@@ -84,59 +84,63 @@ describe("バッファの処理", () => {
   test("シークレットアクセスキーはexit(1)。", () => {
     const exit = jest
       .spyOn(process, "exit")
-      .mockImplementation(number => number);
+      .mockImplementation((number) => number);
     secrets.checkBuffer("", null, dummySecretKeySet);
     expect(exit).toHaveBeenCalledWith(1);
   });
 });
 
 describe("ファイルの読み込み", () => {
-  test("存在しないファイルは無視", () => {
-    expect(secrets.checkFile("./spec/notexistfile")).resolves.toBe("ENOENT");
+  test("存在しないファイルは無視", async () => {
+    await expect(secrets.checkFile("./spec/notexistfile")).resolves.toBe(
+      "ENOENT"
+    );
   });
 
-  test("テキストファイルは検査の上でCHECKEDを返す", () => {
-    expect(secrets.checkFile("./package.json")).resolves.toBe("CHECKED");
+  test("テキストファイルは検査の上でCHECKEDを返す", async () => {
+    await expect(secrets.checkFile("./package.json")).resolves.toBe("CHECKED");
   });
 
-  test("jpg画像は無視", () => {
-    expect(secrets.checkFile("./spec/m0938.jpg")).resolves.toBe("BINARY");
+  test("jpg画像は無視", async () => {
+    await expect(secrets.checkFile("./spec/m0938.jpg")).resolves.toBe("BINARY");
   });
 
-  test("png画像は無視", () => {
-    expect(secrets.checkFile("spec/m0444.png")).resolves.toBe("BINARY");
+  test("png画像は無視", async () => {
+    await expect(secrets.checkFile("spec/m0444.png")).resolves.toBe("BINARY");
   });
 
-  test("svg画像は無視", () => {
-    expect(secrets.checkFile("spec/icon.svg")).resolves.toBe("BINARY");
+  test("svg画像は無視", async () => {
+    await expect(secrets.checkFile("spec/icon.svg")).resolves.toBe("BINARY");
   });
 
-  test("yarn.lockは無視", () => {
+  test("yarn.lockは無視", async () => {
     const path = "./any/yarn.lock";
-    expect(secrets.checkFile(path)).resolves.toBe("NOT TARGET");
+    await expect(secrets.checkFile(path)).resolves.toBe("NOT TARGET");
   });
 
-  test("package-lock.jsonは無視", () => {
+  test("package-lock.jsonは無視", async () => {
     const path = "./any/package-lock.json";
-    expect(secrets.checkFile(path)).resolves.toBe("NOT TARGET");
+    await expect(secrets.checkFile(path)).resolves.toBe("NOT TARGET");
   });
 });
 
 describe("ファイルリストの読み込み", () => {
-  test("ファイルリストの読み込みは結果の配列を返す", () => {
+  test("ファイルリストの読み込みは結果の配列を返す", async () => {
     const list = [
       { filename: "./package.json" },
       { filename: "./spec/m0938.jpg" },
       { filename: "spec/icon.svg" },
       { filename: "./any/yarn.lock" },
-      { filename: "./spec/notexistfile" }
+      { filename: "./spec/notexistfile" },
     ];
-    expect(secrets.checkResults(list)).resolves.toEqual([
+
+    const result = await secrets.checkResults(list);
+    expect(result).toEqual([
       "CHECKED",
       "BINARY",
       "BINARY",
       "NOT TARGET",
-      "ENOENT"
+      "ENOENT",
     ]);
   });
 });

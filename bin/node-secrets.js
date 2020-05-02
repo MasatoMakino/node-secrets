@@ -21,7 +21,7 @@ const patterns = [
   RegExp(SECRET_PATTERN),
   RegExp(
     `${opt_quote}${aws}(ACCOUNT|account|Account)_?(ID|id|Id)?${opt_quote}${connect}${opt_quote}[0-9]{4}-?[0-9]{4}-?[0-9]{4}${opt_quote}`
-  )
+  ),
 ];
 
 exports.scan = () => {
@@ -40,21 +40,21 @@ exports.scan();
  * ファイル一覧を受け取って検査を開始する。
  * @param results{Array}
  */
-exports.checkResults = results => {
-  console.log(`node-secrets : checking ${results.length} items...`);
+exports.checkResults = (results) => {
   return new Promise((resolve, reject) => {
+    // console.log(`node-secrets : checking ${results.length} items...`);
     let promises = [];
     for (let result of results) {
       promises.push(exports.checkFile(result.filename));
     }
-    Promise.all(promises).then(results => {
+    Promise.all(promises).then((results) => {
+      //console.log(`node-secrets : Done.`);
       resolve(results);
-      console.log(`node-secrets : Done.`);
     });
   });
 };
 
-const isTargetFile = filePath => {
+const isTargetFile = (filePath) => {
   //.lockファイルは検査対象外。
   let name = path.basename(filePath);
   if (name === "yarn.lock" || name === "package-lock.json") {
@@ -67,7 +67,7 @@ const isTargetFile = filePath => {
  * 指定されたURLのファイルを検査する
  * @param path{string}
  */
-exports.checkFile = path => {
+exports.checkFile = (path) => {
   console.log(`node-secrets : ${path}`);
 
   return new Promise((resolve, reject) => {
