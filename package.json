@@ -21,12 +21,11 @@
   "scripts": {
     "test": "jest --coverage",
     "secrets": "node bin/node-secrets",
-    "prettyQuick": "pretty-quick --staged",
     "doc:card": "repoimg -n MasatoMakino/node-secrets -o ./docs/card.png"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run prettyQuick"
+      "pre-commit": "pretty-quick --staged"
     }
   }
 }
