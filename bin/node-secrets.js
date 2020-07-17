@@ -99,7 +99,7 @@ exports.checkBuffer = (path, err, data) => {
     throw err;
   }
 
-  const isBinary = istextorbinary.isBinarySync(path, data);
+  const isBinary = istextorbinary.isBinary(path, data);
   const isSVG = isSvg(data);
   if (isBinary === true || isSVG === true) {
     return "BINARY";
