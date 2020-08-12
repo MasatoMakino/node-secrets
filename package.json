@@ -20,8 +20,7 @@
   },
   "scripts": {
     "test": "jest --coverage",
-    "secrets": "node bin/node-secrets",
-    "doc:card": "repoimg -n MasatoMakino/node-secrets -o ./docs/card.png"
+    "secrets": "node bin/node-secrets"
   },
   "husky": {
     "hooks": {
