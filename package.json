@@ -1,6 +1,6 @@
 {
   "name": "node-secrets",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "bin": {
     "node-secrets": "bin/node-secrets.js"
   },
