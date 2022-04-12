@@ -8,7 +8,7 @@
   "author": "MasatoMakino",
   "license": "MIT",
   "dependencies": {
-    "is-svg": "^4.2.2",
+    "is-svg": "^4.3.0",
     "istextorbinary": "^5.12.0",
     "staged-git-files": "^1.2.0"
   },
