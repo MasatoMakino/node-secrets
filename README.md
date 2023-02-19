@@ -4,8 +4,10 @@
 [![Test Coverage](https://api.codeclimate.com/v1/badges/e056bc80b8fde45e37c8/test_coverage)](https://codeclimate.com/github/MasatoMakino/node-secrets/test_coverage)
 [![Maintainability](https://api.codeclimate.com/v1/badges/e056bc80b8fde45e37c8/maintainability)](https://codeclimate.com/github/MasatoMakino/node-secrets/maintainability)
 
-## Install
+## How to use
 
 ```shell
-npm i -D @masatomakino/aws-secrets
+npx @masatomakino/aws-secrets
 ```
+
+This command scans files staged in the git repository for AWS key information.
