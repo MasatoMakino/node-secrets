@@ -100,9 +100,10 @@ export const checkBuffer = (path, err, data) => {
     throw err;
   }
 
-  const bufferIsBinary = isBinary(path, data);
-  const bufferIsSVG = isSvg(data);
-  if (bufferIsBinary || bufferIsSVG) {
+  if (isBinary(path, data)) {
+    return "BINARY";
+  }
+  if (isSvg(data.toString())) {
     return "BINARY";
   }
 
