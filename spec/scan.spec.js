@@ -1,8 +1,6 @@
 const fs = require("fs");
 const secrets = require("../bin/node-secrets.js");
-
-const spyLog = jest.spyOn(console, "log").mockImplementation((x) => x);
-const spyWarn = jest.spyOn(console, "warn").mockImplementation((x) => x);
+import { describe, expect, test, vi } from "vitest";
 
 const dummyKey = "AKIAIOSFODNN7EXAMPLE";
 const dummySecretKey = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY";
@@ -28,7 +26,7 @@ describe("文字列の検査", () => {
   test("シークレットアクセスキーを変数keyに代入しようとするとエラーを返す", () => {
     expect(secrets.checkPatterns("", dummySecretKeySet)).toContain(
       dummySecretKeySet,
-      0
+      0,
     );
 
     let key = "key=" + dummySecretKey;
@@ -45,8 +43,8 @@ describe("文字列の検査", () => {
     expect(
       secrets.checkPatterns(
         "",
-        "/anything/path/to/file/too/long/long/over40.js"
-      )
+        "/anything/path/to/file/too/long/long/over40.js",
+      ),
     ).toBeNull();
   });
 });
@@ -82,7 +80,7 @@ describe("バッファの処理", () => {
   });
 
   test("シークレットアクセスキーはexit(1)。", () => {
-    const exit = jest
+    const exit = vi
       .spyOn(process, "exit")
       .mockImplementation((number) => number);
     secrets.checkBuffer("", null, dummySecretKeySet);
@@ -93,7 +91,7 @@ describe("バッファの処理", () => {
 describe("ファイルの読み込み", () => {
   test("存在しないファイルは無視", async () => {
     await expect(secrets.checkFile("./spec/notexistfile")).resolves.toBe(
-      "ENOENT"
+      "ENOENT",
     );
   });
 
