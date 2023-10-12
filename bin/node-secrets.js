@@ -1,11 +1,12 @@
 #!/usr/bin/env node
 "use strict";
 
-const sgf = require("staged-git-files");
-const fs = require("fs");
-const path = require("path");
-const istextorbinary = require("istextorbinary");
-const isSvg = require("is-svg");
+import fs from "fs";
+import sgf from "staged-git-files";
+import path from "path";
+import { isBinary } from "istextorbinary";
+import isSvg from "is-svg";
+
 const projectDir = `${process.cwd()}/`;
 
 const aws = "(AWS|aws|Aws)?_?";
@@ -20,32 +21,32 @@ const patterns = [
   RegExp(KEY_PATTERN),
   RegExp(SECRET_PATTERN),
   RegExp(
-    `${opt_quote}${aws}(ACCOUNT|account|Account)_?(ID|id|Id)?${opt_quote}${connect}${opt_quote}[0-9]{4}-?[0-9]{4}-?[0-9]{4}${opt_quote}`
+    `${opt_quote}${aws}(ACCOUNT|account|Account)_?(ID|id|Id)?${opt_quote}${connect}${opt_quote}[0-9]{4}-?[0-9]{4}-?[0-9]{4}${opt_quote}`,
   ),
 ];
 
-exports.scan = () => {
+export const scan = () => {
   //staging状態のファイル一覧を取得する。
   sgf((err, results) => {
     if (err) {
       console.log(err);
       process.exit(1); // ensure git hooks abort
     }
-    exports.checkResults(results);
+    checkResults(results);
   });
 };
-exports.scan();
+scan();
 
 /**
  * ファイル一覧を受け取って検査を開始する。
  * @param results{Array}
  */
-exports.checkResults = (results) => {
+export const checkResults = (results) => {
   return new Promise((resolve, reject) => {
     // console.log(`node-secrets : checking ${results.length} items...`);
     let promises = [];
     for (let result of results) {
-      promises.push(exports.checkFile(result.filename));
+      promises.push(checkFile(result.filename));
     }
     Promise.all(promises).then((results) => {
       //console.log(`node-secrets : Done.`);
@@ -67,7 +68,7 @@ const isTargetFile = (filePath) => {
  * 指定されたURLのファイルを検査する
  * @param path{string}
  */
-exports.checkFile = (path) => {
+export const checkFile = (path) => {
   console.log(`node-secrets : ${path}`);
 
   return new Promise((resolve, reject) => {
@@ -77,7 +78,7 @@ exports.checkFile = (path) => {
     }
 
     fs.readFile(projectDir + path, (err, data) => {
-      const result = exports.checkBuffer(path, err, data);
+      const result = checkBuffer(path, err, data);
       resolve(result);
     });
   });
@@ -90,7 +91,7 @@ exports.checkFile = (path) => {
  * @param data
  * @returns {*}
  */
-exports.checkBuffer = (path, err, data) => {
+export const checkBuffer = (path, err, data) => {
   if (err) {
     //ファイルが存在しない場合はチェックを中止。
     if (err.code === "ENOENT") {
@@ -99,13 +100,14 @@ exports.checkBuffer = (path, err, data) => {
     throw err;
   }
 
-  const isBinary = istextorbinary.isBinary(path, data);
-  const isSVG = isSvg(data);
-  if (isBinary === true || isSVG === true) {
+  if (isBinary(path, data)) {
+    return "BINARY";
+  }
+  if (isSvg(data.toString())) {
     return "BINARY";
   }
 
-  const execArray = exports.checkPatterns(path, data);
+  const execArray = checkPatterns(path, data);
   if (execArray != null) {
     process.exit(1); // ensure git hooks abort
   }
@@ -118,7 +120,7 @@ exports.checkBuffer = (path, err, data) => {
  * @param data バッファー
  * @returns {*} パターンが存在した場合は配列、それ以外はnullが帰る
  */
-exports.checkPatterns = (path, data) => {
+export const checkPatterns = (path, data) => {
   for (let regexp of patterns) {
     const result = regexp.exec(data);
 
@@ -127,11 +129,11 @@ exports.checkPatterns = (path, data) => {
       console.warn("  File Path :", path);
       console.warn(
         "  Line number :",
-        getLineNumber(result.input, result.index)
+        getLineNumber(result.input, result.index),
       );
       console.warn(
         "  Matched :",
-        getWarningLine(result.input, result.index, result[0])
+        getWarningLine(result.input, result.index, result[0]),
       );
 
       return result;

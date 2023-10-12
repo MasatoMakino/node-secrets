@@ -1,6 +1,6 @@
-const fs = require("fs");
-const secrets = require("../bin/node-secrets.js");
+import fs from "fs";
 import { describe, expect, test, vi } from "vitest";
+import * as secrets from "../bin/node-secrets.js";
 
 const dummyKey = "AKIAIOSFODNN7EXAMPLE";
 const dummySecretKey = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY";
