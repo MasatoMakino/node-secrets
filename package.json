@@ -26,6 +26,8 @@
   "scripts": {
     "test": "vitest --silent",
     "coverage": "vitest --run --coverage",
+    "preversion": "git checkout main && git pull && npm ci && npx vitest --run",
+    "postversion": "git add package.json package-lock.json && git checkout -b version/$(git describe --tags --abbrev=0)",
     "secrets": "node bin/node-secrets",
     "prepare": "husky install"
   },
