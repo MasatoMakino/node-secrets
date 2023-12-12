@@ -6,7 +6,8 @@ export default defineConfig({
     environment: "node",
     coverage: {
       provider: "istanbul",
-      reporter: ["text", "html", "json", "lcov"],
+      reporter: ["text", "lcov"],
+      include: ["bin/**/*.js"],
     },
   },
 });
