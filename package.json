@@ -18,7 +18,7 @@
   },
   "devDependencies": {
     "@vitest/coverage-istanbul": "^1.0.4",
-    "husky": "^8.0.3",
+    "husky": "^9.0.10",
     "lint-staged": "^15.0.2",
     "prettier": "^3.0.3",
     "vitest": "^1.0.4"
@@ -29,7 +29,7 @@
     "preversion": "git checkout main && git pull && npm ci && npx vitest --run",
     "postversion": "git add package.json package-lock.json && git checkout -b version/$(git describe --tags --abbrev=0)",
     "secrets": "node bin/node-secrets",
-    "prepare": "husky install"
+    "prepare": "husky"
   },
   "main": "index.js",
   "directories": {
