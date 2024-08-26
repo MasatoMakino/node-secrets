@@ -19,7 +19,7 @@ jobs:
           node-version: "18"
       - run: npm ci
       - name: Code Climate Coverage Action
-        uses: paambaati/codeclimate-action@v8.0.0
+        uses: paambaati/codeclimate-action@v9.0.0
         env:
           CC_TEST_REPORTER_ID: b479b0f26594ca54d62a0a7032af57913ad2b007344729c6011a2f22a8520575
         with:
