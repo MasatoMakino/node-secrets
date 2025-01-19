@@ -18,7 +18,7 @@
   },
   "devDependencies": {
     "@masatomakino/release-helper": "^0.1.3",
-    "@vitest/coverage-istanbul": "^2.0.5",
+    "@vitest/coverage-istanbul": "^3.0.2",
     "husky": "^9.0.10",
     "lint-staged": "^15.0.2",
     "prettier": "^3.0.3"
