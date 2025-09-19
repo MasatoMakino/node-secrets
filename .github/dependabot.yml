@@ -9,8 +9,15 @@ updates:
     directory: "/" # Location of package manifests
     schedule:
       interval: "daily"
+    cooldown:
+      default-days: 5 # Control overall update frequency for security
 
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
       interval: "daily"
+    cooldown:
+      default-days: 5
+      semver-major-days: 30  # Major version updates (breaking changes)
+      semver-minor-days: 7   # Minor version updates (new features)
+      semver-patch-days: 3   # Patch version updates (bug fixes)
