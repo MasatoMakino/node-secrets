@@ -1,6 +1,6 @@
 {
   "name": "@masatomakino/aws-secrets",
-  "version": "0.3.3",
+  "version": "0.4.0",
   "type": "module",
   "bin": {
     "node-secrets": "bin/node-secrets.js"
