@@ -1,10 +1,9 @@
 # node-secrets
 
-[![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE)
-[![CI](https://github.com/MasatoMakino/node-secrets/actions/workflows/ci.yml/badge.svg)](https://github.com/MasatoMakino/node-secrets/actions/workflows/ci.yml)
+> [!CAUTION]
+> This package has been deprecated. Use GitHub's [Secret scanning](https://docs.github.com/en/code-security/secret-scanning/introduction/about-secret-scanning) instead. See [Issue #175](https://github.com/MasatoMakino/node-secrets/issues/175) for details.
 
-> [!NOTE]  
-> This package is designed to prevent the accidental push of private keys. However, for enhanced security, we strongly recommend using GitHub's [Secret scanning](https://docs.github.com/en/code-security/secret-scanning/introduction/about-secret-scanning) feature. Please use this package primarily for technical experimentation purposes.
+[![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE)
 
 ## How to use
 
